@@ -1,9 +1,10 @@
 package se.amt.appuserjakartalaboration;
 
-import java.io.*;
-
-import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
+import jakarta.servlet.http.*;
+
+import java.io.IOException;
+import java.io.PrintWriter;
 
 @WebServlet(name = "helloServlet", value = "/hello-servlet")
 public class HelloServlet extends HttpServlet {
@@ -25,3 +26,4 @@ public class HelloServlet extends HttpServlet {
 
     public void destroy() {
     }
+}
