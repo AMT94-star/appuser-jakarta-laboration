@@ -2,54 +2,95 @@
 <html lang="en"
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="jakarta.faces.core"
-      xmlns:h="jakarta.faces.html">
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces"
+>
 <f:view>
     <h:head>
         <title>Chat</title>
     </h:head>
-    <h:body>
-        <h1>Chatlog</h1>
+    <h:body style="background-color: bisque;">
+        <div style="max-width: 900px; margin: 40px auto; font-family: Arial, sans-serif;">
 
-        <h:panelGroup rendered="#{loginBean.loggedInUser != null}">
-            <p>Logged in as: #{loginBean.displayName}</p>
+            <h:panelGroup rendered="#{loginBean.loggedInUser != null}">
+                <div style="display:flex; justify-content: space-between; align-items: center;
+            margin-bottom: 20px;">
+                    <h1 style="margin:0; background-color: bisque">Chatlog</h1>
 
-            <div id="messages"/>
-            <input type="text" id="msg"/>
-            <button onclick="sendMessage()">Send</button>
+                    <h:form>
+                        <p:commandButton value="Log out" action="#{loginBean.logout}"
+                                         severity="secondary"/>
+                    </h:form>
+                </div>
 
-            <script>
-                //<![CDATA[
-                const username = "#{loginBean.displayName}";
-                const socket = new WebSocket("ws://localhost:8080/websocket-laboration/ws/chat");
+                <p:panel header="Chat" style="background-color: lightgoldenrodyellow">
+                    <p style="margin-top:0; margin-bottom: 20px;">
+                        Logged in as: #{loginBean.displayName}
+                    </p>
 
-                socket.onmessage = (event) => {
-                    let div = document.getElementById("messages");
-                    let p = document.createElement("p");
-                    p.textContent = event.data;
-                    div.appendChild(p);
-                };
+                    <div id="messages"
+                         style="height:300px;
+                 overflow-y: auto;
+                 border:1px solid #dcdcdc;
+                 border-radius: 6px;
+                 padding:15px;
+                 margin-bottom: 20px;">
+                    </div>
 
-                socket.onopen = () => {
-                    console.log("Connected to WebSocket server");
-                };
+                    <div style="display:flex; gap:10px;">
+                        <input type="text"
+                               id="msg"
+                               style="flex:1;
+                       padding:10px;
+                       border:1px;
+                       solid:#ccc;
+                       border-radius: 6px;"/>
 
-                const sendMessage = () => {
-                    let text = document.getElementById("msg").value;
-                    socket.send(username + ": " + text);
-                    document.getElementById("msg").value = "";
-                }
-                //]]>
-            </script>
+                        <button type="button"
+                                onclick="sendMessage()"
+                                style="padding:10px 18px;
+                                border:none; border-radius: 6px; cursor:pointer;">
+                            Send
+                        </button>
+                    </div>
+                </p:panel>
 
-            <h:form>
-                <h:commandButton value="Log out" action="#{loginBean.logout}"/>
-            </h:form>
-        </h:panelGroup>
+                <script>
+                    //<![CDATA[
+                    const username = "#{loginBean.displayName}";
+                    const socket = new WebSocket("ws://localhost:8080/websocket-laboration/ws/chat");
 
-        <h:panelGroup rendered="#{loginBean.loggedInUser == null}">
-            <p>You are not logged in.</p>
-            <h:link outcome="/login.xhtml" value="Go to login"/>
-        </h:panelGroup>
+                    socket.onmessage = (event) => {
+                        let div = document.getElementById("messages");
+                        let p = document.createElement("p");
+                        p.textContent = event.data;
+                        p.style.margin = "0 0 10px 0";
+                        p.style.padding = "8px 10px";
+                        p.style.borderRadius = "6px";
+                        p.style.border = "1px solid #ececec";
+                        div.appendChild(p);
+                        div.scrollTop = div.scrollHeight;
+                    };
+
+                    socket.onopen = () => {
+                        console.log("Connected to WebSocket server");
+                    };
+
+                    const sendMessage = () => {
+                        let text = document.getElementById("msg").value;
+                        socket.send(username + ": " + text);
+                        document.getElementById("msg").value = "";
+                    }
+                    //]]>
+                </script>
+
+            </h:panelGroup>
+
+            <h:panelGroup rendered="#{loginBean.loggedInUser == null}">
+                <p>You are not logged in.</p>
+                <h:link outcome="/login.xhtml" value="Go to login"/>
+            </h:panelGroup>
+        </div>
     </h:body>
 </f:view>
 </html>
