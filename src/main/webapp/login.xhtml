@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="jakarta.faces.core"
+      xmlns:h="jakarta.faces.html">
+<f:view>
+    <h:head>
+        <title>Login</title>
+    </h:head>
+    <h:body>
+        <h1>Log in</h1>
+        <h:messages globalOnly="true" showSummary="false" showDetail="true"
+                    style="color:olivedrab; list-style-type=none; padding-left:0"/>
+
+        <h:form>
+            <h:panelGrid columns="2">
+                <h:outputLabel for="username" value="Username: "/>
+                <h:inputText id="username" value="#{loginBean.username}" required="true"/>
+
+                <h:outputLabel for="password" value="Password: "/>
+                <h:inputSecret id="password" value="#{loginBean.password}" required="true"/>
+
+                <h:outputText value=""/>
+                <h:commandButton value="Log in" action="#{loginBean.login}"/>
+            </h:panelGrid>
+        </h:form>
+
+    </h:body>
+</f:view>
+</html>

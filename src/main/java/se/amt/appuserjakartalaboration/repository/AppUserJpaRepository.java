@@ -21,7 +21,19 @@ public class AppUserJpaRepository implements AppUserRepository {
     }
 
     @Override
+    public AppUser findByUsernamePassword(String username, String password) {
+        List<AppUser> result = em.createQuery(
+                        "SELECT u FROM AppUser u WHERE u.username = :username AND u.password = :password",
+                        AppUser.class).setParameter("username", username)
+                .setParameter("password", password).getResultList();
+
+        return result.isEmpty() ? null : result.get(0);
+    }
+
+    @Override
     public List<AppUser> findAll() {
         return em.createQuery("SELECT u FROM AppUser u", AppUser.class).getResultList();
     }
+
+
 }

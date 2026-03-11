@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="jakarta.faces.core"
+      xmlns:h="jakarta.faces.html">
+<f:view>
+    <h:head>
+        <title>Chat</title>
+    </h:head>
+    <h:body>
+        <h1>Chatlog</h1>
+
+        <h:panelGroup rendered="#{loginBean.loggedInUser != null}">
+            <p>Logged in as: #{loginBean.displayName}</p>
+
+            <div id="messages"/>
+            <input type="text" id="msg"/>
+            <button onclick="sendMessage()">Send</button>
+
+            <script>
+                //<![CDATA[
+                const username = "#{loginBean.displayName}";
+                const socket = new WebSocket("ws://localhost:8080/websocket-laboration/ws/chat");
+
+                socket.onmessage = (event) => {
+                    let div = document.getElementById("messages");
+                    let p = document.createElement("p");
+                    p.textContent = event.data;
+                    div.appendChild(p);
+                };
+
+                socket.onopen = () => {
+                    console.log("Connected to WebSocket server");
+                };
+
+                const sendMessage = () => {
+                    let text = document.getElementById("msg").value;
+                    socket.send(username + ": " + text);
+                    document.getElementById("msg").value = "";
+                }
+                //]]>
+            </script>
+
+            <h:form>
+                <h:commandButton value="Log out" action="#{loginBean.logout}"/>
+            </h:form>
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{loginBean.loggedInUser == null}">
+            <p>You are not logged in.</p>
+            <h:link outcome="/login.xhtml" value="Go to login"/>
+        </h:panelGroup>
+    </h:body>
+</f:view>
+</html>

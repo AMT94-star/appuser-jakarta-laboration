@@ -30,4 +30,8 @@ public class AppUserService {
     public List<AppUser> getAllUsers() {
         return appUserRepository.findAll();
     }
+
+    public AppUser login(String username, String password) {
+        return appUserRepository.findByUsernamePassword(username, password);
+    }
 }
