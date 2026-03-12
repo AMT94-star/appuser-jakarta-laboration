@@ -8,52 +8,45 @@
 <f:view>
     <h:head>
         <title>Chat</title>
+        <link rel="stylesheet" type="text/css" href="#{request.contextPath}/resources/css/appsev.css"/>
     </h:head>
-    <h:body style="background-color: bisque;">
-        <div style="max-width: 900px; margin: 40px auto; font-family: Arial, sans-serif;">
+
+    <h:body>
+        <div class="chat-wrapper">
 
             <h:panelGroup rendered="#{loginBean.loggedInUser != null}">
-                <div style="display:flex; justify-content: space-between; align-items: center;
-            margin-bottom: 20px;">
-                    <h1 style="margin:0; background-color: bisque">Chatlog</h1>
+                <div class="chat-header">
+
+                    <div>
+                        <h1 style="margin:0;">Chatlog</h1>
+                        <div>Logged in as #{loginBean.displayName}</div>
+                    </div>
 
                     <h:form>
-                        <p:commandButton value="Log out" action="#{loginBean.logout}"
+                        <p:commandButton value="Log out"
+                                         icon="pi pi-sign-out"
+                                         action="#{loginBean.logout}"
                                          severity="secondary"/>
                     </h:form>
                 </div>
 
-                <p:panel header="Chat" style="background-color: lightgoldenrodyellow">
-                    <p style="margin-top:0; margin-bottom: 20px;">
-                        Logged in as: #{loginBean.displayName}
-                    </p>
+                <p:card>
+                    <f:facet name="title">Current chatroom</f:facet>
 
-                    <div id="messages"
-                         style="height:300px;
-                 overflow-y: auto;
-                 border:1px solid #dcdcdc;
-                 border-radius: 6px;
-                 padding:15px;
-                 margin-bottom: 20px;">
-                    </div>
+                    <div id="messages" class="chat-box"></div>
 
-                    <div style="display:flex; gap:10px;">
+                    <div class="chat-input-row">
                         <input type="text"
                                id="msg"
-                               style="flex:1;
-                       padding:10px;
-                       border:1px;
-                       solid:#ccc;
-                       border-radius: 6px;"/>
+                               class="chat-input"
+                               placeholder="Message"/>
 
-                        <button type="button"
-                                onclick="sendMessage()"
-                                style="padding:10px 18px;
-                                border:none; border-radius: 6px; cursor:pointer;">
-                            Send
-                        </button>
+                        <p:commandButton type="button"
+                                         value="Send"
+                                         onclick="sendMessage()"
+                                         icon="pi pi-send"/>
                     </div>
-                </p:panel>
+                </p:card>
 
                 <script>
                     //<![CDATA[
@@ -64,10 +57,7 @@
                         let div = document.getElementById("messages");
                         let p = document.createElement("p");
                         p.textContent = event.data;
-                        p.style.margin = "0 0 10px 0";
-                        p.style.padding = "8px 10px";
-                        p.style.borderRadius = "6px";
-                        p.style.border = "1px solid #ececec";
+                        p.className = "chat-message";
                         div.appendChild(p);
                         div.scrollTop = div.scrollHeight;
                     };
@@ -81,14 +71,23 @@
                         socket.send(username + ": " + text);
                         document.getElementById("msg").value = "";
                     }
+
+                    document.getElementById("msg").addEventListener("keydown", function (event) {
+                        if (event.key == "Enter") {
+                            event.preventDefault();
+                            sendMessage();
+                        }
+                    });
                     //]]>
                 </script>
 
             </h:panelGroup>
 
             <h:panelGroup rendered="#{loginBean.loggedInUser == null}">
-                <p>You are not logged in.</p>
-                <h:link outcome="/login.xhtml" value="Go to login"/>
+                <p:card>
+                    <p>You are not logged in.</p>
+                    <h:link outcome="/login.xhtml" value="Go to login"/>
+                </p:card>
             </h:panelGroup>
         </div>
     </h:body>

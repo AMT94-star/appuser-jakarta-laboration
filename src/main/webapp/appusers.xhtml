@@ -6,51 +6,80 @@
       xmlns:p="primefaces"
 >
 <f:view>
-    <h:head><title>App Users</title></h:head>
+    <h:head>
+        <title>App Users</title>
+        <link rel="stylesheet" type="text/css" href="#{request.contextPath}/resources/css/appsev.css"/>
+    </h:head>
+
     <h:body>
-        <div style="max-width: 900px; margin: 40px auto; font-family: Arial, sans-serif;">
-            <h1 style="text-align:center; margin-bottom: 30px;">App User Register</h1>
-            <h:form id="registeredUsers">
-                <p:panel header="Create new user" style="margin-bottom: 30px; background-color: lightgoldenrodyellow">
-                    <p:messages showSummary="true" showDetail="true" style="margin-bottom: 20px;"/>
+        <div class="page-container">
+            <h1 class="page-title">App User Register</h1>
 
-                    <div style="margin-bottom: 20px;">
-                        <h:outputLabel for="username" value="Username"
-                                       style="display:block; margin-bottom: 8px;"/>
-                        <p:inputText id="username" value="#{appUserBean.username}"
-                                     required="true" style="width:100%;"/>
-                    </div>
+            <div style="display:flex; gap:30px; align-items:flex-start; justify-content:center;">
 
-                    <div style="margin-bottom: 20px;">
-                        <h:outputLabel for="password" value="Password"
-                                       style="display:block; margin-bottom: 8px;"/>
-                        <p:password id="password" value="#{appUserBean.password}"
-                                    required="true" feedback="false" style="width:100%;"/>
-                    </div>
+                <h:form id="registeredUsers">
+                    <p:card style="width:420px">
+                        <f:facet name="title">Create new user</f:facet>
 
-                    <h:outputText value=""/>
-                    <p:commandButton value="Save" action="#{appUserBean.saveUser}"
-                                     style="width:100%;"/>
+                        <p:messages showSummary="true"
+                                    showDetail="true"
+                                    closable="true"
+                                    style="margin-bottom:1rem;"/>
 
-                </p:panel>
-            </h:form>
+                        <div class="form-field">
+                            <h:outputLabel for="username"
+                                           value="Username"
+                                           styleClass="form-label"/>
 
-            <h:form id="userTable">
-                <p:panel header="All Users">
-                    <p:dataTable value="#{appUserBean.users}"
-                                 var="user" paginator="true" paginatorPosition="bottom" rows="5"
-                                 stripedRows="true" responsiveLayout="scroll"
-                                 style="margin-top:10px; text-align:center">
-                        <p:column headerText="ID" style="width:120px;">
-                            #{user.id}
-                        </p:column>
+                            <p:inputText id="username"
+                                         value="#{appUserBean.username}"
+                                         required="true"
+                                         styleClass="full-width"/>
+                        </div>
 
-                        <p:column headerText="Username">
-                            #{user.username}
-                        </p:column>
-                    </p:dataTable>
-                </p:panel>
-            </h:form>
+                        <div class="form-field">
+                            <h:outputLabel for="password"
+                                           value="Password"
+                                           styleClass="form-label"/>
+
+                            <p:password id="password"
+                                        value="#{appUserBean.password}"
+                                        required="true"
+                                        feedback="false"
+                                        styleClass="full-width"/>
+                        </div>
+                        <div style="text-align: center;">
+                            <p:commandButton value="Save"
+                                             icon="pi pi-user-plus"
+                                             action="#{appUserBean.saveUser}"
+                                             update="@form userTable"
+                                             styleClass="full-width"/></div>
+                    </p:card>
+                </h:form>
+
+                <h:form id="userTable">
+                    <p:card style="width:420px">
+                        <f:facet name="title">Registered Users</f:facet>
+                        <p:dataTable value="#{appUserBean.users}"
+                                     var="user"
+                                     paginator="true"
+                                     paginatorPosition="bottom"
+                                     rows="5"
+                                     stripedRows="true"
+                                     responsiveLayout="scroll"
+                                     style="width:100%;">
+
+                            <p:column headerText="ID" style="width:120px">
+                                #{user.id}
+                            </p:column>
+
+                            <p:column headerText="Username">
+                                #{user.username}
+                            </p:column>
+                        </p:dataTable>
+                    </p:card>
+                </h:form>
+            </div>
         </div>
     </h:body>
 </f:view>
