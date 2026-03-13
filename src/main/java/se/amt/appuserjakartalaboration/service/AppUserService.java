@@ -8,11 +8,14 @@ import se.amt.appuserjakartalaboration.entity.AppUser;
 import se.amt.appuserjakartalaboration.repository.AppUserRepository;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 @ApplicationScoped
 public class AppUserService {
 
     private AppUserRepository appUserRepository;
+
+    private static final Logger logger = Logger.getLogger(AppUserService.class.getName());
 
     @Inject
     public AppUserService(AppUserRepository appUserRepository) {
@@ -24,14 +27,28 @@ public class AppUserService {
 
     @Transactional
     public AppUser saveUser(AppUser user) {
-        return appUserRepository.save(user);
+        logger.info("Saving user: " + user.getUsername());
+        AppUser savedUser = appUserRepository.save(user);
+        logger.info("Saved user with id: " + savedUser.getId());
+        return savedUser;
     }
 
     public List<AppUser> getAllUsers() {
+        logger.info("Retrieving all users");
         return appUserRepository.findAll();
     }
 
     public AppUser login(String username, String password) {
-        return appUserRepository.findByUsernamePassword(username, password);
+        logger.info("Login attempt for: " + username);
+        System.out.println("testing to see logger works" + username);
+        AppUser user = appUserRepository.findByUsernamePassword(username, password);
+
+        if (user != null) {
+            logger.info("Logged in as: " + username);
+        } else {
+            logger.warning("Login failed for user: " + username);
+        }
+
+        return user;
     }
 }

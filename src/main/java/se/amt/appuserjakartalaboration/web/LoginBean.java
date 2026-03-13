@@ -25,6 +25,7 @@ public class LoginBean implements Serializable {
         AppUser user = appUserService.login(username, password);
 
         if (user != null) {
+            System.out.println("loginbean called");
             loggedInUser = user;
             return "/chat.xhtml?faces-redirect=true";
         } else {
