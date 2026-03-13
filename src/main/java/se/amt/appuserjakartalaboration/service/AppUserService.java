@@ -39,8 +39,8 @@ public class AppUserService {
     }
 
     public AppUser login(String username, String password) {
+        logger.warning("testing logger");
         logger.info("Login attempt for: " + username);
-        System.out.println("testing to see logger works" + username);
         AppUser user = appUserRepository.findByUsernamePassword(username, password);
 
         if (user != null) {
